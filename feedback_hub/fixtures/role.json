@@ -1,0 +1,23 @@
+[
+ {
+  "doctype": "Role",
+  "name": "Feedback Admin",
+  "role_name": "Feedback Admin",
+  "desk_access": 0,
+  "disabled": 0
+ },
+ {
+  "doctype": "Role",
+  "name": "Moderator",
+  "role_name": "Moderator",
+  "desk_access": 0,
+  "disabled": 0
+ },
+ {
+  "doctype": "Role",
+  "name": "Viewer",
+  "role_name": "Viewer",
+  "desk_access": 0,
+  "disabled": 0
+ }
+]

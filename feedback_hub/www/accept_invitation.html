@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>
+		window.csrf_token = "{{ csrf_token }}";
+		window.fhInvitationToken = {{ token | tojson }};
+	</script>
+
+	<header class="fh-navbar">
+		<span class="fh-brand">Feedback Hub</span>
+		<nav>
+			<a href="/login">Log In</a>
+			<a href="/signup">Sign Up</a>
+		</nav>
+	</header>
+
+	<main class="fh-page-center">
+		<div class="fh-panel" style="text-align: center;">
+			<h1 id="fh-accept-title">Accepting invitation...</h1>
+			<div id="fh-accept-alert" class="fh-alert fh-alert-info fh-visible">Please wait a moment.</div>
+			<div class="fh-footer-actions" id="fh-accept-actions" style="justify-content: center; display: none;"></div>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/fh_api.js?v=12"></script>
+	<script src="/assets/feedback_hub/js/accept_invitation.js?v=12"></script>
+</body>
+</html>

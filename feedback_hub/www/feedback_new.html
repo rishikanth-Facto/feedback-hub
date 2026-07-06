@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "feedback" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<script>
+		window.fhPreselectedBoard = {{ preselected_board | tojson }};
+	</script>
+
+	<main class="fh-page-center">
+		<div class="fh-panel">
+			<h1>New Feedback</h1>
+			<p class="fh-subtitle">Submit feedback for one of your organization's boards.</p>
+
+			<div id="fh-alert" class="fh-alert fh-alert-error"></div>
+
+			<form id="fh-feedback-form">
+				<div class="fh-field">
+					<label for="board">Board <span class="fh-required">*</span></label>
+					<select id="board" name="board" required></select>
+				</div>
+				<div class="fh-field">
+					<label for="title">Title <span class="fh-required">*</span></label>
+					<input type="text" id="title" name="title" required maxlength="140">
+				</div>
+				<div class="fh-field">
+					<label for="description">Description <span class="fh-required">*</span></label>
+					<textarea id="description" name="description" rows="4" required></textarea>
+				</div>
+				<div class="fh-field">
+					<label for="category">Category <span class="fh-required">*</span></label>
+					<select id="category" name="category" required></select>
+				</div>
+				<div class="fh-field">
+					<label for="priority">Priority</label>
+					<select id="priority" name="priority">
+						<option value="Low">Low</option>
+						<option value="Medium" selected>Medium</option>
+						<option value="High">High</option>
+						<option value="Urgent">Urgent</option>
+					</select>
+				</div>
+				<div class="fh-field">
+					<label class="fh-checkbox-label">
+						<input type="checkbox" id="is_anonymous" name="is_anonymous">
+						Submit anonymously
+					</label>
+				</div>
+				<div class="fh-field">
+					<label for="attachments">Attachments</label>
+					<input type="file" id="attachments" name="attachments" multiple>
+					<p class="fh-hint">Up to 5 files, 5 MB each.</p>
+				</div>
+
+				<div class="fh-footer-actions">
+					<a class="fh-btn fh-btn-secondary" href="/feedback_list">Cancel</a>
+					<button type="submit" class="fh-btn fh-btn-primary" id="fh-submit">Submit Feedback</button>
+				</div>
+			</form>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/feedback_new.js?v=12"></script>
+</body>
+</html>

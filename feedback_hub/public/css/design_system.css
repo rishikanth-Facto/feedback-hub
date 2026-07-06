@@ -1,0 +1,930 @@
+/* Feedback Hub - shared design tokens & auth-page styles.
+   Tokens follow DesignSystem.md section 1.1/1.2 (dark theme palette + type). */
+
+:root {
+	--ams-bg: #090b10;
+	--ams-surface: #111420;
+	--ams-surface-2: #181d2c;
+	--ams-border: #232840;
+	--ams-text: #dde3f0;
+	--ams-text-muted: #8892a4;
+	--ams-accent: #7c6af7;
+	--ams-accent-hi: #9d8efa;
+	--ams-amber: #f5a623;
+	--ams-green: #22c55e;
+	--ams-red: #ef4444;
+	--ams-blue: #3b82f6;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body.fh-body {
+	margin: 0;
+	min-height: 100vh;
+	background: var(--ams-bg);
+	color: var(--ams-text);
+	font-family: system-ui, -apple-system, sans-serif;
+	font-size: 1rem;
+	line-height: 1.5;
+	display: flex;
+	flex-direction: column;
+}
+
+.fh-mono {
+	font-family: "JetBrains Mono", monospace;
+}
+
+a {
+	color: var(--ams-accent);
+	text-decoration: none;
+}
+a:hover {
+	color: var(--ams-accent-hi);
+}
+
+/* Top navigation bar (Section 3.1) */
+.fh-navbar {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 1.5rem;
+	background: var(--ams-surface);
+	border-bottom: 1px solid var(--ams-border);
+}
+.fh-navbar .fh-brand {
+	font-weight: 600;
+	color: var(--ams-text);
+}
+.fh-navbar nav {
+	display: flex;
+	gap: 1.25rem;
+	align-items: center;
+}
+.fh-navbar nav a {
+	color: var(--ams-text-muted);
+}
+.fh-navbar nav a.active,
+.fh-navbar nav a:hover {
+	color: var(--ams-accent);
+}
+
+/* Centered constrained-width form panel (Section 4.1) */
+.fh-page-center {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem 1rem;
+}
+.fh-panel {
+	width: 100%;
+	max-width: 720px;
+	background: var(--ams-surface);
+	border: 1px solid var(--ams-border);
+	border-radius: 12px;
+	padding: 2rem;
+}
+.fh-panel h1 {
+	margin: 0 0 0.5rem;
+	font-size: 1.5rem;
+}
+.fh-panel .fh-subtitle {
+	color: var(--ams-text-muted);
+	margin: 0 0 1.5rem;
+}
+
+.fh-field {
+	margin-bottom: 1.1rem;
+}
+.fh-field label {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-size: 0.875rem;
+	color: var(--ams-text);
+}
+.fh-field label .fh-required {
+	color: var(--ams-red);
+}
+.fh-field input,
+.fh-field select,
+.fh-field textarea {
+	width: 100%;
+	padding: 0.6rem 0.75rem;
+	background: var(--ams-surface-2);
+	border: 1px solid var(--ams-border);
+	border-radius: 8px;
+	color: var(--ams-text);
+	font-family: inherit;
+	font-size: 1rem;
+}
+.fh-field input:focus,
+.fh-field select:focus,
+.fh-field textarea:focus {
+	outline: none;
+	border-color: var(--ams-accent);
+	box-shadow: 0 0 0 2px rgba(124, 106, 247, 0.25);
+}
+.fh-hint {
+	font-size: 0.8rem;
+	color: var(--ams-text-muted);
+	margin-top: 0.3rem;
+}
+
+.fh-footer-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+}
+
+.fh-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+	padding: 0.6rem 1.1rem;
+	border-radius: 8px;
+	border: 1px solid transparent;
+	font-size: 0.95rem;
+	font-weight: 500;
+	cursor: pointer;
+	font-family: inherit;
+}
+.fh-btn-primary {
+	background: var(--ams-accent);
+	color: #fff;
+}
+.fh-btn-primary:hover {
+	background: var(--ams-accent-hi);
+}
+.fh-btn-secondary {
+	background: transparent;
+	border-color: var(--ams-border);
+	color: var(--ams-text);
+}
+.fh-btn-secondary:hover {
+	background: var(--ams-surface-2);
+}
+.fh-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+.fh-btn-block {
+	width: 100%;
+}
+
+.fh-alert {
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+	margin-bottom: 1.25rem;
+	font-size: 0.9rem;
+	display: none;
+}
+.fh-alert.fh-visible {
+	display: block;
+}
+.fh-alert-error {
+	background: rgba(239, 68, 68, 0.12);
+	color: var(--ams-red);
+	border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.fh-alert-success {
+	background: rgba(34, 197, 94, 0.12);
+	color: var(--ams-green);
+	border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.fh-alert-info {
+	background: rgba(59, 130, 246, 0.12);
+	color: var(--ams-blue);
+	border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.fh-panel-footer-text {
+	text-align: center;
+	margin-top: 1.25rem;
+	color: var(--ams-text-muted);
+	font-size: 0.9rem;
+}
+
+/* Status badge (Section 5.3) - used for role display on dashboard/profile */
+.fh-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.15rem 0.6rem;
+	border-radius: 999px;
+	font-size: 0.8rem;
+	background: rgba(124, 106, 247, 0.15);
+	color: var(--ams-accent-hi);
+	margin: 0 0.25rem 0.25rem 0;
+}
+
+/* Empty/quick-link cards on dashboard */
+.fh-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1rem;
+	margin-top: 1.5rem;
+}
+.fh-card {
+	background: var(--ams-surface-2);
+	border: 1px solid var(--ams-border);
+	border-radius: 10px;
+	padding: 1.25rem;
+}
+.fh-card h3 {
+	margin: 0 0 0.4rem;
+	font-size: 1rem;
+}
+.fh-card p {
+	margin: 0;
+	color: var(--ams-text-muted);
+	font-size: 0.875rem;
+}
+
+.fh-avatar {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	object-fit: cover;
+	background: var(--ams-surface-2);
+	border: 1px solid var(--ams-border);
+}
+
+@media (max-width: 768px) {
+	.fh-panel {
+		padding: 1.25rem;
+		border-radius: 0;
+		border-left: none;
+		border-right: none;
+	}
+	.fh-navbar {
+		height: 48px;
+		padding: 0 1rem;
+	}
+}
+
+/* --------------------------------------------------------------------- */
+/* Module 2 (org-management) additions below - additive only, nothing    */
+/* above this line is modified (design.md Decision 15 / Risk mitigation).*/
+/* --------------------------------------------------------------------- */
+
+/* Organization switcher (Section 3.1 User Zone / dropdown-contrast 1.4) */
+.fh-org-switcher {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+.fh-org-switcher select {
+	background: var(--ams-surface-2);
+	color: var(--ams-text);
+	border: 1px solid var(--ams-border);
+	border-radius: 6px;
+	padding: 0.35rem 0.6rem;
+	font-family: inherit;
+	font-size: 0.85rem;
+}
+
+/* Page shell for list/detail pages (wider than the auth form panel) */
+.fh-shell {
+	width: 100%;
+	max-width: 1080px;
+	margin: 0 auto;
+	padding: 2rem 1.5rem;
+}
+.fh-shell-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+	gap: 1rem;
+}
+.fh-shell-header h1 {
+	margin: 0;
+	font-size: 1.4rem;
+}
+
+/* Two-column detail layout (Section 2.2) */
+.fh-detail-grid {
+	display: grid;
+	grid-template-columns: 66% 1fr;
+	gap: 1.5rem;
+	align-items: start;
+}
+@media (max-width: 900px) {
+	.fh-detail-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Table with inline actions (Section 2.2 / 5) */
+.fh-table-wrap {
+	overflow-x: auto;
+}
+.fh-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.9rem;
+}
+.fh-table th {
+	text-align: left;
+	color: var(--ams-text-muted);
+	font-weight: 500;
+	font-size: 0.78rem;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	padding: 0.6rem 0.75rem;
+	border-bottom: 1px solid var(--ams-border);
+}
+.fh-table td {
+	padding: 0.6rem 0.75rem;
+	border-bottom: 1px solid var(--ams-border);
+	white-space: nowrap;
+	vertical-align: middle;
+}
+.fh-table tbody tr:hover {
+	background: var(--ams-surface-2);
+}
+.fh-table .fh-table-actions {
+	text-align: right;
+	white-space: nowrap;
+}
+.fh-table select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: var(--ams-surface-2);
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%238892a4'%3e%3cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: right 0.5rem center;
+	background-size: 1rem;
+	color: var(--ams-text);
+	border: 1px solid var(--ams-border);
+	border-radius: 6px;
+	padding: 0.35rem 1.6rem 0.35rem 0.6rem;
+	line-height: 1.4;
+	font-family: inherit;
+	font-size: 0.85rem;
+	cursor: pointer;
+	vertical-align: middle;
+}
+.fh-table select:focus {
+	outline: none;
+	border-color: var(--ams-accent);
+	box-shadow: 0 0 0 2px rgba(124, 106, 247, 0.25);
+}
+/* Dropdown-contrast rule (DesignSystem.md 1.4): option list on dark surfaces
+   uses --ams-surface-2, not the browser's default white picklist. */
+.fh-table select option,
+.fh-field select option {
+	background-color: var(--ams-surface-2);
+	color: var(--ams-text);
+}
+.fh-table td .fh-badge,
+.fh-table td .fh-btn {
+	vertical-align: middle;
+}
+
+/* Status badge state-color variants, layered on the base .fh-badge (5.3) */
+.fh-badge-active {
+	background: rgba(34, 197, 94, 0.15);
+	color: var(--ams-green);
+}
+.fh-badge-pending {
+	background: rgba(59, 130, 246, 0.15);
+	color: var(--ams-blue);
+}
+.fh-badge-suspended,
+.fh-badge-inactive {
+	background: rgba(245, 166, 35, 0.15);
+	color: var(--ams-amber);
+}
+
+/* Empty state (Section 5.9) */
+.fh-empty-state {
+	text-align: center;
+	padding: 3rem 1.5rem;
+	color: var(--ams-text-muted);
+}
+.fh-empty-state h2 {
+	color: var(--ams-text);
+	font-size: 1.1rem;
+	margin: 0.5rem 0;
+}
+.fh-empty-state p {
+	margin: 0 0 1.25rem;
+}
+
+/* Confirmation modal (Section 5.12) */
+.fh-modal-backdrop {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(9, 11, 16, 0.6);
+	align-items: center;
+	justify-content: center;
+	z-index: 100;
+}
+.fh-modal-backdrop.fh-visible {
+	display: flex;
+}
+.fh-modal {
+	width: 100%;
+	max-width: 420px;
+	background: var(--ams-surface);
+	border: 1px solid var(--ams-border);
+	border-radius: 12px;
+	padding: 1.5rem;
+}
+.fh-modal h3 {
+	margin: 0 0 0.75rem;
+	font-size: 1.05rem;
+}
+.fh-modal p {
+	margin: 0 0 1.5rem;
+	color: var(--ams-text-muted);
+	font-size: 0.9rem;
+}
+.fh-modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+}
+.fh-btn-danger {
+	background: var(--ams-red);
+	color: #fff;
+}
+.fh-btn-danger:hover {
+	opacity: 0.9;
+}
+
+/* Toast notifications (Section 5.13) */
+.fh-toast-stack {
+	position: fixed;
+	bottom: 1.25rem;
+	right: 1.25rem;
+	display: flex;
+	flex-direction: column-reverse;
+	gap: 0.6rem;
+	z-index: 200;
+}
+.fh-toast {
+	min-width: 240px;
+	max-width: 360px;
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+	background: var(--ams-surface-2);
+	border: 1px solid var(--ams-border);
+	color: var(--ams-text);
+	font-size: 0.88rem;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 0.75rem;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.fh-toast-success {
+	border-color: rgba(34, 197, 94, 0.4);
+}
+.fh-toast-error {
+	border-color: rgba(239, 68, 68, 0.4);
+}
+.fh-toast-close {
+	cursor: pointer;
+	color: var(--ams-text-muted);
+	background: none;
+	border: none;
+	font-size: 1rem;
+	line-height: 1;
+}
+
+.fh-danger-zone {
+	border: 1px solid rgba(239, 68, 68, 0.3);
+	border-radius: 10px;
+	padding: 1rem 1.25rem;
+	margin-top: 1.5rem;
+}
+.fh-danger-zone h3 {
+	margin: 0 0 0.4rem;
+	color: var(--ams-red);
+	font-size: 0.95rem;
+}
+
+/* --------------------------------------------------------------------- */
+/* Module 3 (product-board-management) additions below - additive only, */
+/* nothing above this line is modified.                                  */
+/* --------------------------------------------------------------------- */
+
+/* Product status badge - "Archived" maps to Muted/Draft (DesignSystem.md 5.3) */
+.fh-badge-archived {
+	background: rgba(136, 146, 164, 0.15);
+	color: var(--ams-text-muted);
+}
+
+/* Board visibility badges - reuse the status-badge mechanism (design.md
+   Decision 13): Public (open) = green, Internal (caution) = amber,
+   Private (most restricted) = red. */
+.fh-badge-public {
+	background: rgba(34, 197, 94, 0.15);
+	color: var(--ams-green);
+}
+.fh-badge-internal {
+	background: rgba(245, 166, 35, 0.15);
+	color: var(--ams-amber);
+}
+.fh-badge-private {
+	background: rgba(239, 68, 68, 0.15);
+	color: var(--ams-red);
+}
+
+/* --------------------------------------------------------------------- */
+/* Module 4 (board-feedback-items) additions below - additive only,      */
+/* nothing above this line is modified.                                  */
+/* --------------------------------------------------------------------- */
+
+/* Page header for the Kanban board (replaces the old two-column detail
+   layout, design.md Decision 8) */
+.fh-kanban-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.25rem;
+	gap: 1rem;
+}
+.fh-kanban-header h1 {
+	margin: 0;
+	font-size: 1.4rem;
+}
+.fh-kanban-header-meta {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+.fh-view-toggle {
+	display: inline-flex;
+	gap: 0.4rem;
+	margin-right: 0.6rem;
+}
+.fh-icon-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	border: 1px solid var(--ams-border);
+	background: transparent;
+	color: var(--ams-text-muted);
+	cursor: pointer;
+	font-size: 1rem;
+}
+.fh-icon-btn:hover {
+	background: var(--ams-surface-2);
+	color: var(--ams-text);
+}
+
+/* Kanban Board Layout (DesignSystem.md Section 2.2) */
+.fh-kanban-board {
+	display: flex;
+	gap: 1rem;
+	overflow-x: auto;
+	padding-bottom: 1rem;
+	align-items: flex-start;
+}
+.fh-kanban-column {
+	flex: 0 0 280px;
+	width: 280px;
+	background: var(--ams-surface);
+	border: 1px solid var(--ams-border);
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	max-height: calc(100vh - 220px);
+}
+.fh-kanban-column-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.85rem 1rem;
+	border-bottom: 1px solid var(--ams-border);
+	font-weight: 500;
+	font-size: 0.9rem;
+}
+.fh-kanban-column-count {
+	color: var(--ams-text-muted);
+	font-size: 0.8rem;
+	background: var(--ams-surface-2);
+	border-radius: 999px;
+	padding: 0.1rem 0.55rem;
+}
+.fh-kanban-cards {
+	flex: 1;
+	overflow-y: auto;
+	padding: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.65rem;
+}
+.fh-kanban-card {
+	background: var(--ams-surface-2);
+	border: 1px solid var(--ams-border);
+	border-radius: 8px;
+	padding: 0.75rem 0.85rem;
+	cursor: pointer;
+}
+.fh-kanban-card:hover {
+	border-color: var(--ams-accent);
+}
+.fh-kanban-card.fh-draggable {
+	cursor: grab;
+}
+.fh-kanban-card.fh-dragging {
+	opacity: 0.4;
+}
+.fh-kanban-column.fh-drop-target {
+	border-color: var(--ams-accent);
+}
+.fh-kanban-card-title {
+	font-size: 0.9rem;
+	margin: 0 0 0.5rem;
+	color: var(--ams-text);
+}
+.fh-kanban-card-meta {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	font-size: 0.78rem;
+	color: var(--ams-text-muted);
+}
+.fh-kanban-card-meta-left {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+.fh-comment-count {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+/* Mobile: stack columns, one at a time, with a tab toggle (2.2 Kanban rules) */
+.fh-kanban-tabs {
+	display: none;
+	gap: 0.5rem;
+	overflow-x: auto;
+	margin-bottom: 1rem;
+}
+.fh-kanban-tabs button {
+	background: var(--ams-surface-2);
+	border: 1px solid var(--ams-border);
+	color: var(--ams-text-muted);
+	border-radius: 999px;
+	padding: 0.35rem 0.85rem;
+	font-size: 0.8rem;
+	font-family: inherit;
+	cursor: pointer;
+	white-space: nowrap;
+}
+.fh-kanban-tabs button.active {
+	color: var(--ams-accent);
+	border-color: var(--ams-accent);
+}
+@media (max-width: 768px) {
+	.fh-kanban-tabs {
+		display: flex;
+	}
+	.fh-kanban-board {
+		overflow-x: visible;
+	}
+	.fh-kanban-column {
+		flex: 1 1 100%;
+		width: 100%;
+		display: none;
+		max-height: none;
+	}
+	.fh-kanban-column.fh-mobile-active {
+		display: flex;
+	}
+}
+
+/* Vote Widget (DesignSystem.md Section 5.5) */
+.fh-vote-widget {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	border: none;
+	background: none;
+	color: var(--ams-text-muted);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 0.85rem;
+	padding: 0;
+}
+.fh-vote-widget:hover {
+	color: var(--ams-accent-hi);
+}
+.fh-vote-widget.fh-voted {
+	color: var(--ams-accent);
+}
+.fh-vote-widget:disabled {
+	color: var(--ams-border);
+	cursor: not-allowed;
+}
+
+/* Larger modal variant for forms (settings, feedback detail) - reuses the
+   existing .fh-modal shell, only widens it (design.md Decision 8/9) */
+.fh-modal-lg {
+	max-width: 640px;
+}
+
+/* Comment Thread (DesignSystem.md Section 5.6) */
+.fh-comment-thread {
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	max-height: 260px;
+	overflow-y: auto;
+	margin: 1rem 0;
+	padding-right: 0.25rem;
+}
+.fh-comment {
+	display: flex;
+	gap: 0.6rem;
+}
+.fh-comment-avatar {
+	flex: 0 0 28px;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: var(--ams-surface-2);
+	border: 1px solid var(--ams-border);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.7rem;
+	color: var(--ams-text-muted);
+}
+.fh-comment-body {
+	flex: 1;
+}
+.fh-comment-header {
+	display: flex;
+	gap: 0.5rem;
+	align-items: baseline;
+	font-size: 0.78rem;
+	color: var(--ams-text-muted);
+	margin-bottom: 0.15rem;
+}
+.fh-comment-author {
+	color: var(--ams-text);
+	font-weight: 500;
+}
+.fh-comment-text {
+	font-size: 0.85rem;
+	color: var(--ams-text);
+	white-space: pre-wrap;
+}
+.fh-comment-input-row {
+	display: flex;
+	gap: 0.5rem;
+	align-items: flex-end;
+	border-top: 1px solid var(--ams-border);
+	padding-top: 0.85rem;
+}
+.fh-comment-input-row textarea {
+	flex: 1;
+	resize: vertical;
+	min-height: 2.4rem;
+}
+
+/* --------------------------------------------------------------------- */
+/* feedback-management additions below - additive only, nothing above    */
+/* this line is modified.                                                */
+/* --------------------------------------------------------------------- */
+
+/* Feedback priority badges - reuse the status-badge mechanism (design.md
+   Decision 13/precedent): Urgent/High read as escalating warmth, Low/Medium
+   as calmer, same rationale as Board visibility's color choices. */
+.fh-badge-low {
+	background: rgba(136, 146, 164, 0.15);
+	color: var(--ams-text-muted);
+}
+.fh-badge-medium {
+	background: rgba(59, 130, 246, 0.15);
+	color: var(--ams-blue);
+}
+.fh-badge-high {
+	background: rgba(245, 166, 35, 0.15);
+	color: var(--ams-amber);
+}
+.fh-badge-urgent {
+	background: rgba(239, 68, 68, 0.15);
+	color: var(--ams-red);
+}
+/* Feedback status badges - split moderation lifecycle (New/Under Review/
+   Approved/Rejected) and roadmap lifecycle (Planned/In Progress/Released/
+   Closed), design.md Decision 14. Reuses the existing badge color palette
+   rather than adding a parallel one for the same visual meanings. */
+.fh-badge-new {
+	background: rgba(136, 146, 164, 0.15);
+	color: var(--ams-text-muted);
+}
+.fh-badge-under-review {
+	background: rgba(59, 130, 246, 0.15);
+	color: var(--ams-blue);
+}
+.fh-badge-approved {
+	background: rgba(34, 197, 94, 0.15);
+	color: var(--ams-green);
+}
+.fh-badge-rejected {
+	background: rgba(239, 68, 68, 0.15);
+	color: var(--ams-red);
+}
+.fh-badge-planned {
+	background: rgba(245, 166, 35, 0.15);
+	color: var(--ams-amber);
+}
+.fh-badge-in-progress {
+	background: rgba(139, 92, 246, 0.15);
+	color: var(--ams-accent);
+}
+.fh-badge-released {
+	background: rgba(34, 197, 94, 0.15);
+	color: var(--ams-green);
+}
+.fh-badge-closed {
+	background: rgba(136, 146, 164, 0.15);
+	color: var(--ams-text-muted);
+}
+
+/* Filter bar (Feedback List) - a row of the same .fh-field selects/inputs
+   already used in forms, just laid out horizontally instead of stacked. */
+.fh-filter-bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	align-items: flex-end;
+	margin-bottom: 1.25rem;
+}
+.fh-filter-bar .fh-field {
+	margin-bottom: 0;
+	min-width: 160px;
+}
+.fh-filter-bar .fh-field input,
+.fh-filter-bar .fh-field select {
+	margin-bottom: 0;
+}
+
+/* Pagination controls (Feedback List) */
+.fh-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1rem;
+	font-size: 0.85rem;
+	color: var(--ams-text-muted);
+}
+
+/* Attachment list (Feedback Detail/Edit) - reuses .fh-table-actions'
+   vertical-align convention for its remove button, no new component. */
+.fh-attachment-list {
+	list-style: none;
+	margin: 0.5rem 0 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.fh-attachment-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid var(--ams-border);
+	border-radius: 8px;
+	font-size: 0.85rem;
+}
+
+/* Anonymous-submission checkbox (Create/Edit Feedback) - `.fh-field input`
+   forces width:100%/padding for text/select/textarea, which also matched
+   a bare `<input type="checkbox">` and rendered it as an oversized,
+   misplaced box (found during manual verification). Higher-specificity
+   override, scoped to this one labeled-checkbox pattern only. */
+.fh-field label.fh-checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+.fh-field label.fh-checkbox-label input[type="checkbox"] {
+	width: auto;
+	padding: 0;
+}

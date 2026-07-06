@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<header class="fh-navbar">
+		<span class="fh-brand">Feedback Hub</span>
+		<nav>
+			<a href="/login">Log In</a>
+			<a href="/signup" class="active">Sign Up</a>
+		</nav>
+	</header>
+
+	<main class="fh-page-center">
+		<div class="fh-panel">
+			<h1>Create your account</h1>
+			<p class="fh-subtitle">Join Feedback Hub to start sharing feedback.</p>
+
+			<div id="fh-alert" class="fh-alert"></div>
+
+			<form id="fh-signup-form">
+				<div class="fh-field">
+					<label for="first_name">First Name <span class="fh-required">*</span></label>
+					<input type="text" id="first_name" name="first_name" required autocomplete="given-name">
+				</div>
+				<div class="fh-field">
+					<label for="last_name">Last Name <span class="fh-required">*</span></label>
+					<input type="text" id="last_name" name="last_name" required autocomplete="family-name">
+				</div>
+				<div class="fh-field">
+					<label for="email">Email <span class="fh-required">*</span></label>
+					<input type="email" id="email" name="email" required autocomplete="email">
+				</div>
+				<div class="fh-field">
+					<label for="password">Password <span class="fh-required">*</span></label>
+					<input type="password" id="password" name="password" required autocomplete="new-password">
+					<p class="fh-hint">Min 8 characters, with uppercase, lowercase, digit, and special character.</p>
+				</div>
+				<div class="fh-field">
+					<label for="confirm_password">Confirm Password <span class="fh-required">*</span></label>
+					<input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+				</div>
+				<div class="fh-footer-actions">
+					<button type="submit" class="fh-btn fh-btn-primary fh-btn-block" id="fh-submit">Sign Up</button>
+				</div>
+			</form>
+
+			<p class="fh-panel-footer-text">Already have an account? <a href="/login">Log in</a></p>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/fh_api.js?v=12"></script>
+	<script src="/assets/feedback_hub/js/signup.js?v=12"></script>
+</body>
+</html>

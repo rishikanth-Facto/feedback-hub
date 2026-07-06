@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "products" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<main class="fh-page-center">
+		<div class="fh-panel">
+			<h1>New Board</h1>
+			<p class="fh-subtitle">Add a board under <strong>{{ product.product_name }}</strong>.</p>
+
+			{% if product_archived %}
+			<div class="fh-alert fh-alert-error fh-visible">
+				This product is archived. Boards cannot be created under an archived product.
+			</div>
+			{% endif %}
+
+			<div id="fh-alert" class="fh-alert fh-alert-error"></div>
+
+			<form id="fh-board-form">
+				<div class="fh-field">
+					<label for="board_name">Board Name <span class="fh-required">*</span></label>
+					<input type="text" id="board_name" name="board_name" required maxlength="140" {{ "disabled" if product_archived else "" }}>
+				</div>
+				<div class="fh-field">
+					<label for="visibility">Visibility <span class="fh-required">*</span></label>
+					<select id="visibility" name="visibility" required {{ "disabled" if product_archived else "" }}>
+						<option value="Public">Public</option>
+						<option value="Private">Private</option>
+						<option value="Internal">Internal</option>
+					</select>
+				</div>
+				<div class="fh-field">
+					<label for="description">Description</label>
+					<textarea id="description" name="description" rows="3" {{ "disabled" if product_archived else "" }}></textarea>
+				</div>
+
+				<div class="fh-footer-actions">
+					<a class="fh-btn fh-btn-secondary" href="/product_detail?id={{ product.name }}">Cancel</a>
+					<button type="submit" class="fh-btn fh-btn-primary" id="fh-submit" {{ "disabled" if product_archived else "" }}>Create Board</button>
+				</div>
+			</form>
+		</div>
+	</main>
+
+	<script>
+		window.fhBoardProductId = {{ product.name | tojson }};
+	</script>
+	<script src="/assets/feedback_hub/js/board_new.js?v=12"></script>
+</body>
+</html>

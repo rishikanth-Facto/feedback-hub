@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+
+	<header class="fh-navbar">
+		<span class="fh-brand">Feedback Hub</span>
+		<nav>
+			<a href="/dashboard">Dashboard</a>
+			<a href="/my_profile" class="active">Profile</a>
+			<a href="/logout">Logout</a>
+		</nav>
+	</header>
+
+	<main class="fh-page-center" style="align-items: flex-start;">
+		<div class="fh-panel">
+			<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+				<img class="fh-avatar" id="fh-avatar-preview"
+					src="{{ profile_user.user_image or '' }}"
+					onerror="this.style.display='none'" alt="Profile photo">
+				<div>
+					<h1 style="margin: 0;">{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
+					<p class="fh-hint" style="margin: 0.25rem 0 0;">{{ profile_user.email }}</p>
+				</div>
+			</div>
+
+			<p class="fh-subtitle">
+				{% for role in roles %}<span class="fh-badge">{{ role }}</span>{% endfor %}
+			</p>
+			<p class="fh-hint">Last Login: {{ profile_user.last_login or "Never" }}</p>
+			<p class="fh-hint">Created: {{ profile_user.creation }}</p>
+
+			<hr style="border-color: var(--ams-border); margin: 1.5rem 0;">
+
+			<div id="fh-alert" class="fh-alert"></div>
+
+			<form id="fh-profile-form">
+				<div class="fh-field">
+					<label for="first_name">First Name</label>
+					<input type="text" id="first_name" name="first_name" value="{{ profile_user.first_name }}">
+				</div>
+				<div class="fh-field">
+					<label for="last_name">Last Name</label>
+					<input type="text" id="last_name" name="last_name" value="{{ profile_user.last_name }}">
+				</div>
+				<div class="fh-field">
+					<label>Email</label>
+					<input type="email" value="{{ profile_user.email }}" disabled>
+					<p class="fh-hint">Email cannot be changed here.</p>
+				</div>
+				<div class="fh-field">
+					<label for="photo">Profile Photo</label>
+					<input type="file" id="photo" name="photo" accept=".jpg,.jpeg,.png,.gif,.webp">
+					<p class="fh-hint">JPG, PNG, GIF, or WEBP. Max 2 MB.</p>
+				</div>
+				<div class="fh-footer-actions">
+					<button type="submit" class="fh-btn fh-btn-primary" id="fh-submit">Save Changes</button>
+				</div>
+			</form>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/fh_api.js?v=12"></script>
+	<script src="/assets/feedback_hub/js/profile.js?v=12"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }}</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<header class="fh-navbar">
+		<span class="fh-brand">Feedback Hub</span>
+		<nav>
+			{% if is_guest %}
+			<a href="/login">Log In</a>
+			<a href="/signup">Sign Up</a>
+			{% else %}
+			<a href="/dashboard">Dashboard</a>
+			{% endif %}
+		</nav>
+	</header>
+
+	<main class="fh-page-center">
+		<div class="fh-panel" style="text-align: center;">
+			<h1>Collect and manage feedback, all in one place</h1>
+			<p class="fh-subtitle">Feedback Hub helps your team gather, moderate, and act on user feedback.</p>
+			<div class="fh-footer-actions" style="justify-content: center;">
+				{% if is_guest %}
+				<a class="fh-btn fh-btn-secondary" href="/login">Log In</a>
+				<a class="fh-btn fh-btn-primary" href="/signup">Get Started</a>
+				{% else %}
+				<a class="fh-btn fh-btn-primary" href="/dashboard">Go to Dashboard</a>
+				{% endif %}
+			</div>
+		</div>
+	</main>
+</body>
+</html>

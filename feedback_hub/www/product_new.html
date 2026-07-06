@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "products" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<main class="fh-page-center">
+		<div class="fh-panel">
+			<h1>New Product</h1>
+			<p class="fh-subtitle">Create a product to organize feedback boards under.</p>
+
+			<div id="fh-alert" class="fh-alert fh-alert-error"></div>
+
+			<form id="fh-product-form">
+				<div class="fh-field">
+					<label for="product_name">Product Name <span class="fh-required">*</span></label>
+					<input type="text" id="product_name" name="product_name" required maxlength="140">
+				</div>
+				<div class="fh-field">
+					<label for="description">Description</label>
+					<textarea id="description" name="description" rows="3"></textarea>
+				</div>
+
+				<div class="fh-footer-actions">
+					<a class="fh-btn fh-btn-secondary" href="/products">Cancel</a>
+					<button type="submit" class="fh-btn fh-btn-primary" id="fh-submit">Create Product</button>
+				</div>
+			</form>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/product_new.js?v=12"></script>
+</body>
+</html>

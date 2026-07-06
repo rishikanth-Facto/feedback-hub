@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "products" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	{% if not_found %}
+	<main class="fh-page-center">
+		<div class="fh-panel" style="text-align: center;">
+			<h1>Board Not Found</h1>
+			<p class="fh-hint">It doesn't exist, or you don't have access to it.</p>
+			<div class="fh-footer-actions" style="justify-content: center;">
+				<a class="fh-btn fh-btn-primary" href="/products">Back to Products</a>
+			</div>
+		</div>
+	</main>
+	{% else %}
+	<script>
+		window.fhBoardId = {{ board.name | tojson }};
+		window.fhCanUpdateBoard = {{ "true" if can_update else "false" }};
+		window.fhCanDeleteBoard = {{ "true" if can_delete else "false" }};
+		window.fhCanViewProduct = {{ "true" if can_view_product else "false" }};
+		window.fhBoardProductId = {{ board.product | tojson }};
+		window.fhCanMoveFeedback = {{ "true" if can_move_status else "false" }};
+	</script>
+
+	<main class="fh-shell">
+		<div class="fh-kanban-header">
+			<div>
+				{% if can_view_product %}
+				<p class="fh-hint" style="margin: 0 0 0.35rem;"><a href="/product_detail?id={{ board.product }}">&larr; Back to Product</a></p>
+				{% endif %}
+				<h1>{{ board.board_name }}
+					<span class="fh-badge {{ 'fh-badge-public' if board.visibility == 'Public' else ('fh-badge-internal' if board.visibility == 'Internal' else 'fh-badge-private') }}">{{ board.visibility }}</span>
+				</h1>
+			</div>
+			<div class="fh-kanban-header-meta">
+				<button type="button" class="fh-btn fh-btn-primary" id="fh-new-feedback-btn">+ New Feedback</button>
+				{% if can_update or can_delete %}
+				<button type="button" class="fh-icon-btn" id="fh-board-settings-btn" aria-label="Board settings" title="Board settings">&#9881;</button>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="fh-kanban-tabs" id="fh-kanban-tabs"></div>
+
+		<div class="fh-kanban-board" id="fh-kanban-board">
+			<!-- Columns are rendered by fh_kanban.js, one per FEEDBACK_STATUSES entry -->
+		</div>
+	</main>
+
+	<!-- Board Settings modal - the pre-Kanban edit form/danger-zone, relocated
+	     here rather than shown inline (design.md Decision 8). -->
+	<div id="fh-board-settings-backdrop" class="fh-modal-backdrop">
+		<div class="fh-modal fh-modal-lg">
+			<h3>Board Settings</h3>
+			<div id="fh-alert" class="fh-alert fh-alert-error"></div>
+
+			<form id="fh-board-edit-form">
+				<div class="fh-field">
+					<label for="board_name">Board Name</label>
+					<input type="text" id="board_name" name="board_name" value="{{ board.board_name }}" {{ "" if can_update else "disabled" }}>
+				</div>
+				<div class="fh-field">
+					<label for="visibility">Visibility</label>
+					<select id="visibility" name="visibility" {{ "" if can_update else "disabled" }}>
+						<option value="Public" {{ "selected" if board.visibility == "Public" else "" }}>Public</option>
+						<option value="Private" {{ "selected" if board.visibility == "Private" else "" }}>Private</option>
+						<option value="Internal" {{ "selected" if board.visibility == "Internal" else "" }}>Internal</option>
+					</select>
+				</div>
+				<div class="fh-field">
+					<label for="description">Description</label>
+					<textarea id="description" name="description" rows="3" {{ "" if can_update else "disabled" }}>{{ board.description or "" }}</textarea>
+				</div>
+				<p class="fh-hint">Slug: <span class="fh-mono">{{ board.slug }}</span></p>
+				{% if can_update %}
+				<div class="fh-footer-actions">
+					<button type="submit" class="fh-btn fh-btn-primary">Save Changes</button>
+				</div>
+				{% endif %}
+			</form>
+
+			{% if can_delete %}
+			<div class="fh-danger-zone">
+				<h3>Danger Zone</h3>
+				<p class="fh-hint">Deleting a board cannot be undone.</p>
+				<button type="button" class="fh-btn fh-btn-danger" id="fh-delete-btn">Delete Board</button>
+			</div>
+			{% endif %}
+
+			<div class="fh-modal-footer" style="margin-top: 1.25rem;">
+				<button type="button" class="fh-btn fh-btn-secondary" id="fh-board-settings-close">Close</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Feedback modal - dual purpose: New Feedback form / Feedback Detail
+	     (description + vote + comments), one shell (design.md Decision 9). -->
+	<div id="fh-feedback-modal-backdrop" class="fh-modal-backdrop">
+		<div class="fh-modal fh-modal-lg">
+			<div id="fh-feedback-form-section">
+				<h3>New Feedback</h3>
+				<div id="fh-feedback-form-alert" class="fh-alert fh-alert-error"></div>
+				<form id="fh-feedback-form">
+					<div class="fh-field">
+						<label for="feedback_title">Title <span class="fh-required">*</span></label>
+						<input type="text" id="feedback_title" name="feedback_title" required maxlength="140">
+					</div>
+					<div class="fh-field">
+						<label for="feedback_description">Description</label>
+						<textarea id="feedback_description" name="feedback_description" rows="3"></textarea>
+					</div>
+					<div class="fh-modal-footer">
+						<button type="button" class="fh-btn fh-btn-secondary" id="fh-feedback-form-cancel">Cancel</button>
+						<button type="submit" class="fh-btn fh-btn-primary" id="fh-feedback-form-submit">Submit Feedback</button>
+					</div>
+				</form>
+			</div>
+
+			<div id="fh-feedback-detail-section" style="display: none;">
+				<h3 id="fh-feedback-detail-title"></h3>
+				<p class="fh-hint" id="fh-feedback-detail-meta"></p>
+				<p id="fh-feedback-detail-description"></p>
+
+				<button type="button" class="fh-vote-widget" id="fh-feedback-detail-vote">
+					<span aria-hidden="true">&#9650;</span>
+					<span id="fh-feedback-detail-vote-count">0</span>
+					<span>votes</span>
+				</button>
+
+				<div class="fh-comment-thread" id="fh-feedback-detail-comments"></div>
+
+				<form id="fh-feedback-comment-form" class="fh-comment-input-row">
+					<textarea id="fh-feedback-comment-text" placeholder="Add a comment..." rows="1"></textarea>
+					<button type="submit" class="fh-btn fh-btn-primary">Post</button>
+				</form>
+
+				<div class="fh-modal-footer" style="margin-top: 1rem;">
+					<button type="button" class="fh-btn fh-btn-secondary" id="fh-feedback-detail-close">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/assets/feedback_hub/js/fh_kanban.js?v=12"></script>
+	<script src="/assets/feedback_hub/js/board_detail.js?v=12"></script>
+	{% endif %}
+</body>
+</html>

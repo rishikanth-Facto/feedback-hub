@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<header class="fh-navbar">
+		<span class="fh-brand">Feedback Hub</span>
+		<nav>
+			<a href="/login">Log In</a>
+			<a href="/signup">Sign Up</a>
+		</nav>
+	</header>
+
+	<main class="fh-page-center">
+		<div class="fh-panel" style="text-align: center;">
+			<h1>{{ title }}</h1>
+			<div class="fh-alert fh-visible fh-alert-{{ variant }}" style="text-align: left;">{{ message }}</div>
+			<div class="fh-footer-actions" style="justify-content: center;">
+				<a class="fh-btn fh-btn-primary" href="/login">Go to Log In</a>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

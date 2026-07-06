@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "dashboard" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<main class="fh-page-center" style="align-items: flex-start;">
+		<div class="fh-panel" style="max-width: 900px;">
+			<h1>Welcome, {{ first_name }}</h1>
+			<p class="fh-subtitle">
+				{% for role in roles %}<span class="fh-badge">{{ role }}</span>{% endfor %}
+			</p>
+
+			<div class="fh-grid">
+				<div class="fh-card">
+					<h3>Organizations</h3>
+					<p>Create, manage, and switch between your organizations.</p>
+					<div class="fh-footer-actions" style="justify-content: flex-start; margin-top: 0.75rem;">
+						<a class="fh-btn fh-btn-secondary" href="/organizations">Go to Organizations</a>
+					</div>
+				</div>
+				<div class="fh-card">
+					<h3>Profile</h3>
+					<p>View and update your name and photo.</p>
+					<div class="fh-footer-actions" style="justify-content: flex-start; margin-top: 0.75rem;">
+						<a class="fh-btn fh-btn-secondary" href="/my_profile">Go to Profile</a>
+					</div>
+				</div>
+				<div class="fh-card">
+					<h3>Logout</h3>
+					<p>Sign out of your Feedback Hub account.</p>
+					<div class="fh-footer-actions" style="justify-content: flex-start; margin-top: 0.75rem;">
+						<a class="fh-btn fh-btn-secondary" href="/logout">Logout</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

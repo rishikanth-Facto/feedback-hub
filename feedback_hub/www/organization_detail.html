@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "organizations" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	{% if not_found %}
+	<main class="fh-page-center">
+		<div class="fh-panel" style="text-align: center;">
+			<h1>Organization Not Found</h1>
+			<p class="fh-hint">It doesn't exist, or you don't have access to it.</p>
+			<div class="fh-footer-actions" style="justify-content: center;">
+				<a class="fh-btn fh-btn-primary" href="/organizations">Back to Organizations</a>
+			</div>
+		</div>
+	</main>
+	{% else %}
+	<script>
+		window.fhOrgId = {{ organization.name | tojson }};
+		window.fhIsAdmin = {{ "true" if is_admin else "false" }};
+	</script>
+
+	<main class="fh-shell">
+		<div class="fh-shell-header">
+			<h1>{{ organization.organization_name }}</h1>
+			<span class="fh-badge {{ 'fh-badge-active' if organization.status == 'Active' else 'fh-badge-inactive' }}">{{ organization.status }}</span>
+		</div>
+
+		<div class="fh-detail-grid">
+			<div>
+				<div class="fh-card" style="margin-bottom: 1.5rem;">
+					<h3>Details</h3>
+					<div id="fh-alert" class="fh-alert fh-alert-error"></div>
+
+					<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
+						<img class="fh-avatar" id="fh-logo-preview"
+							src="{{ organization.logo or '' }}"
+							onerror="this.style.display='none'" alt="Organization logo">
+						{% if is_admin %}
+						<div>
+							<label for="fh-logo-input" class="fh-btn fh-btn-secondary" style="cursor: pointer;">Change Logo</label>
+							<input type="file" id="fh-logo-input" accept=".jpg,.jpeg,.png,.gif,.webp" style="display: none;">
+							<p class="fh-hint" style="margin: 0.35rem 0 0;">JPG, PNG, GIF, or WEBP - max 2 MB.</p>
+						</div>
+						{% endif %}
+					</div>
+
+					<form id="fh-org-edit-form">
+						<div class="fh-field">
+							<label for="organization_name">Organization Name</label>
+							<input type="text" id="organization_name" name="organization_name"
+								value="{{ organization.organization_name }}" {{ "" if is_admin else "disabled" }}>
+						</div>
+						<div class="fh-field">
+							<label for="description">Description</label>
+							<textarea id="description" name="description" rows="3"
+								{{ "" if is_admin else "disabled" }}>{{ organization.description or "" }}</textarea>
+						</div>
+						<p class="fh-hint">Slug: <span class="fh-mono">{{ organization.slug }}</span></p>
+						{% if is_admin %}
+						<div class="fh-footer-actions">
+							<button type="submit" class="fh-btn fh-btn-primary">Save Changes</button>
+						</div>
+						{% endif %}
+					</form>
+				</div>
+
+				<div class="fh-card">
+					<div class="fh-shell-header" style="margin-bottom: 1rem;">
+						<h3 style="margin: 0;">Members</h3>
+					</div>
+					<div id="fh-members-loading" class="fh-hint">Loading...</div>
+					<div class="fh-table-wrap">
+						<table class="fh-table" id="fh-members-table" style="display: none;">
+							<thead>
+								<tr>
+									<th>Member</th>
+									<th>Role</th>
+									<th>Status</th>
+									<th>Joined</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody id="fh-members-table-body"></tbody>
+						</table>
+					</div>
+				</div>
+
+				{% if is_admin %}
+				<div class="fh-card" style="margin-top: 1.5rem;">
+					<h3>Invite a Member</h3>
+					<div id="fh-invite-alert" class="fh-alert fh-alert-error"></div>
+					<form id="fh-invite-form">
+						<div class="fh-field">
+							<label for="invite_email">Email <span class="fh-required">*</span></label>
+							<input type="email" id="invite_email" name="invite_email" required>
+						</div>
+						<div class="fh-field">
+							<label for="invite_role">Role <span class="fh-required">*</span></label>
+							<select id="invite_role" name="invite_role" required>
+								<option value="Product Owner">Product Owner</option>
+								<option value="Moderator">Moderator</option>
+								<option value="Developer">Developer</option>
+								<option value="Customer">Customer</option>
+								<option value="Organization Admin">Organization Admin</option>
+							</select>
+						</div>
+						<div class="fh-footer-actions">
+							<button type="submit" class="fh-btn fh-btn-primary" id="fh-invite-submit">Send Invitation</button>
+						</div>
+					</form>
+				</div>
+				{% endif %}
+			</div>
+
+			<div>
+				<div class="fh-card">
+					<h3>Metadata</h3>
+					<p class="fh-hint">Owner: {{ organization.organization_owner }}</p>
+					<p class="fh-hint">Created: {{ organization.creation }}</p>
+					<p class="fh-hint">Last Modified: {{ organization.modified }}</p>
+				</div>
+
+				{% if is_admin %}
+				<div class="fh-danger-zone">
+					<h3>Danger Zone</h3>
+					<p class="fh-hint">Deleting an organization cannot be undone.</p>
+					<button type="button" class="fh-btn fh-btn-danger" id="fh-delete-btn">Delete Organization</button>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</main>
+	{% endif %}
+
+	<script src="/assets/feedback_hub/js/organization_detail.js?v=12"></script>
+</body>
+</html>

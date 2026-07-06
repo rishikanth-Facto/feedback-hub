@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "feedback" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<script>
+		window.fhCanCreateFeedback = {{ "true" if can_create else "false" }};
+		window.fhCanMoveFeedback = {{ "true" if can_move_feedback else "false" }};
+	</script>
+
+	<main class="fh-shell">
+		<div class="fh-shell-header">
+			<h1>Feedback</h1>
+			<div class="fh-kanban-header-meta">
+				<div class="fh-view-toggle">
+					<button type="button" class="fh-btn fh-btn-primary" id="fh-view-toggle-list">List</button>
+					<button type="button" class="fh-btn fh-btn-secondary" id="fh-view-toggle-kanban">Kanban</button>
+				</div>
+				{% if can_create %}
+				<a class="fh-btn fh-btn-primary" href="/feedback_new">+ New Feedback</a>
+				{% endif %}
+			</div>
+		</div>
+
+		<div id="fh-feedback-kanban-view" style="display: none;">
+			<div class="fh-field" style="max-width: 320px; margin-bottom: 1rem;">
+				<label for="fh-kanban-product-select">Product</label>
+				<select id="fh-kanban-product-select"><option value="">Select a product...</option></select>
+			</div>
+
+			<div id="fh-kanban-no-product" class="fh-empty-state">
+				<h2>Select a product</h2>
+				<p>Choose a product above to see its feedback grouped by status.</p>
+			</div>
+
+			<div id="fh-feedback-kanban-board-wrap" style="display: none;">
+				<div class="fh-kanban-tabs" id="fh-feedback-kanban-tabs"></div>
+				<div class="fh-kanban-board" id="fh-feedback-kanban-board">
+					<!-- Columns are rendered by fh_feedback_kanban.js, one per status -->
+				</div>
+			</div>
+		</div>
+
+		<div id="fh-feedback-list-view">
+		<form id="fh-feedback-filter-bar" class="fh-filter-bar">
+			<div class="fh-field">
+				<label for="filter_search">Search</label>
+				<input type="text" id="filter_search" placeholder="Title or description...">
+			</div>
+			<div class="fh-field">
+				<label for="filter_board">Board</label>
+				<select id="filter_board"><option value="">All Boards</option></select>
+			</div>
+			<div class="fh-field">
+				<label for="filter_category">Category</label>
+				<select id="filter_category"><option value="">All Categories</option></select>
+			</div>
+			<div class="fh-field">
+				<label for="filter_priority">Priority</label>
+				<select id="filter_priority">
+					<option value="">All Priorities</option>
+					<option value="Low">Low</option>
+					<option value="Medium">Medium</option>
+					<option value="High">High</option>
+					<option value="Urgent">Urgent</option>
+				</select>
+			</div>
+			<div class="fh-field">
+				<label for="filter_status">Status</label>
+				<select id="filter_status">
+					<option value="">All Statuses</option>
+					<option value="New">New</option>
+					<option value="Under Review">Under Review</option>
+					<option value="Approved">Approved</option>
+					<option value="Rejected">Rejected</option>
+					<option value="Planned">Planned</option>
+					<option value="In Progress">In Progress</option>
+					<option value="Released">Released</option>
+					<option value="Closed">Closed</option>
+				</select>
+			</div>
+			<div class="fh-field">
+				<label for="filter_sort">Sort By</label>
+				<select id="filter_sort">
+					<option value="creation">Newest</option>
+					<option value="priority">Priority</option>
+					<option value="title">Title</option>
+					<option value="vote_count">Votes</option>
+					<option value="status">Status</option>
+				</select>
+			</div>
+			<div class="fh-field">
+				<label for="filter_sort_dir">Direction</label>
+				<select id="filter_sort_dir">
+					<option value="desc">Descending</option>
+					<option value="asc">Ascending</option>
+				</select>
+			</div>
+			<button type="submit" class="fh-btn fh-btn-secondary">Apply</button>
+		</form>
+
+		<div id="fh-feedback-list-loading" class="fh-hint">Loading...</div>
+
+		<div class="fh-table-wrap">
+			<table class="fh-table" id="fh-feedback-table" style="display: none;">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Board</th>
+						<th>Category</th>
+						<th>Priority</th>
+						<th>Status</th>
+						<th>Submitted By</th>
+						<th>Votes</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="fh-feedback-table-body"></tbody>
+			</table>
+		</div>
+
+		<div id="fh-feedback-empty" class="fh-empty-state" style="display: none;">
+			<h2>No feedback yet</h2>
+			<p>
+				{% if can_create %}
+				Be the first to submit feedback for this organization.
+				{% else %}
+				No feedback is visible to you yet.
+				{% endif %}
+			</p>
+			{% if can_create %}
+			<a class="fh-btn fh-btn-primary" href="/feedback_new">Submit Feedback</a>
+			{% endif %}
+		</div>
+
+		<div class="fh-pagination" id="fh-feedback-pagination" style="display: none;">
+			<span id="fh-feedback-pagination-info"></span>
+			<button type="button" class="fh-btn fh-btn-secondary" id="fh-feedback-prev-page">Previous</button>
+			<button type="button" class="fh-btn fh-btn-secondary" id="fh-feedback-next-page">Next</button>
+		</div>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/feedback_list.js?v=12"></script>
+	<script src="/assets/feedback_hub/js/fh_feedback_kanban.js?v=12"></script>
+</body>
+</html>

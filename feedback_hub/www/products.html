@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "products" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<script>
+		window.fhCanManageProducts = {{ "true" if can_manage else "false" }};
+	</script>
+
+	<main class="fh-shell">
+		<div class="fh-shell-header">
+			<h1>Products</h1>
+			{% if can_manage %}
+			<a class="fh-btn fh-btn-primary" href="/product_new">+ New Product</a>
+			{% endif %}
+		</div>
+
+		<div id="fh-product-list-loading" class="fh-hint">Loading...</div>
+
+		<div class="fh-table-wrap">
+			<table class="fh-table" id="fh-product-table" style="display: none;">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Slug</th>
+						<th>Status</th>
+						<th>Owner</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="fh-product-table-body"></tbody>
+			</table>
+		</div>
+
+		<div id="fh-product-empty" class="fh-empty-state" style="display: none;">
+			<h2>No products yet</h2>
+			<p>
+				{% if can_manage %}
+				Create your first product to start organizing feedback boards.
+				{% else %}
+				No products are visible to you in this organization.
+				{% endif %}
+			</p>
+			{% if can_manage %}
+			<a class="fh-btn fh-btn-primary" href="/product_new">Create Product</a>
+			{% endif %}
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/products.js?v=12"></script>
+</body>
+</html>

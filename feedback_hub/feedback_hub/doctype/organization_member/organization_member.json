@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "creation": "2026-07-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "organization",
+  "user",
+  "invited_email",
+  "role",
+  "status",
+  "column_break_1",
+  "invited_by",
+  "invitation_token",
+  "invitation_expires_on",
+  "joined_on",
+  "membership_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "invited_email",
+   "fieldtype": "Data",
+   "label": "Invited Email",
+   "options": "Email",
+   "description": "Set when the invited person does not have a Feedback Hub account yet; cleared once User is linked."
+  },
+  {
+   "fieldname": "role",
+   "fieldtype": "Select",
+   "label": "Role",
+   "options": "Organization Admin\nProduct Owner\nModerator\nDeveloper\nCustomer",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nActive\nSuspended",
+   "default": "Pending",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "invited_by",
+   "fieldtype": "Link",
+   "label": "Invited By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invitation_token",
+   "fieldtype": "Data",
+   "label": "Invitation Token",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "invitation_expires_on",
+   "fieldtype": "Datetime",
+   "label": "Invitation Expires On",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "joined_on",
+   "fieldtype": "Datetime",
+   "label": "Joined On",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "membership_key",
+   "fieldtype": "Data",
+   "label": "Membership Key",
+   "hidden": 1,
+   "unique": 1,
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "icon": "fa fa-users",
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-07-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Feedback Hub",
+ "name": "Organization Member",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "All",
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

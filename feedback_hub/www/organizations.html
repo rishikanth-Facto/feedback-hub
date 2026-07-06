@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "organizations" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<main class="fh-shell">
+		<div class="fh-shell-header">
+			<h1>Organizations</h1>
+			<a class="fh-btn fh-btn-primary" href="/organization_new">+ New Organization</a>
+		</div>
+
+		<div id="fh-org-list-loading" class="fh-hint">Loading...</div>
+
+		<div class="fh-table-wrap">
+			<table class="fh-table" id="fh-org-table" style="display: none;">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Slug</th>
+						<th>Your Role</th>
+						<th>Status</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="fh-org-table-body"></tbody>
+			</table>
+		</div>
+
+		<div id="fh-org-empty" class="fh-empty-state" style="display: none;">
+			<h2>No organizations yet</h2>
+			<p>Create your first organization to start inviting teammates.</p>
+			<a class="fh-btn fh-btn-primary" href="/organization_new">Create Organization</a>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/organizations.js?v=12"></script>
+</body>
+</html>

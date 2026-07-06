@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "feedback" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	<script>
+		window.fhFeedbackId = {{ feedback.name | tojson }};
+		window.fhCurrentCategory = {{ feedback.category | tojson }};
+		window.fhInitialAttachments = {{ feedback.attachments | tojson }};
+	</script>
+
+	<main class="fh-page-center">
+		<div class="fh-panel">
+			<h1>Edit Feedback</h1>
+
+			<div id="fh-alert" class="fh-alert fh-alert-error"></div>
+
+			<form id="fh-feedback-edit-form">
+				<div class="fh-field">
+					<label for="title">Title <span class="fh-required">*</span></label>
+					<input type="text" id="title" name="title" required maxlength="140" value="{{ feedback.title }}">
+				</div>
+				<div class="fh-field">
+					<label for="description">Description <span class="fh-required">*</span></label>
+					<textarea id="description" name="description" rows="4" required>{{ feedback.description }}</textarea>
+				</div>
+				<div class="fh-field">
+					<label for="category">Category <span class="fh-required">*</span></label>
+					<select id="category" name="category" required></select>
+				</div>
+				<div class="fh-field">
+					<label for="priority">Priority</label>
+					<select id="priority" name="priority">
+						<option value="Low" {{ "selected" if feedback.priority == "Low" else "" }}>Low</option>
+						<option value="Medium" {{ "selected" if feedback.priority == "Medium" else "" }}>Medium</option>
+						<option value="High" {{ "selected" if feedback.priority == "High" else "" }}>High</option>
+						<option value="Urgent" {{ "selected" if feedback.priority == "Urgent" else "" }}>Urgent</option>
+					</select>
+				</div>
+				<div class="fh-field">
+					<label class="fh-checkbox-label">
+						<input type="checkbox" id="is_anonymous" name="is_anonymous" {{ "checked" if feedback.is_anonymous else "" }}>
+						Submit anonymously
+					</label>
+				</div>
+
+				<div class="fh-footer-actions">
+					<a class="fh-btn fh-btn-secondary" href="/feedback_detail?id={{ feedback.name }}">Cancel</a>
+					<button type="submit" class="fh-btn fh-btn-primary" id="fh-submit">Save Changes</button>
+				</div>
+			</form>
+
+			<div class="fh-card" style="margin-top: 1.5rem;">
+				<h3>Attachments</h3>
+				<ul class="fh-attachment-list" id="fh-attachment-list"></ul>
+				<div class="fh-field" style="margin-top: 0.75rem;">
+					<input type="file" id="fh-attachment-input">
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script src="/assets/feedback_hub/js/feedback_edit.js?v=12"></script>
+</body>
+</html>

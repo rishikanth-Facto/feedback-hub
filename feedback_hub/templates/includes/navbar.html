@@ -1,0 +1,31 @@
+<header class="fh-navbar">
+	<span class="fh-brand">Feedback Hub</span>
+	<nav>
+		<a href="/dashboard" class="{{ 'active' if active_page == 'dashboard' else '' }}">Dashboard</a>
+		<a href="/organizations" class="{{ 'active' if active_page == 'organizations' else '' }}">Organizations</a>
+		<a href="/products" class="{{ 'active' if active_page == 'products' else '' }}">Products</a>
+		<a href="/feedback_list" class="{{ 'active' if active_page == 'feedback' else '' }}">Feedback</a>
+		<a href="/my_profile" class="{{ 'active' if active_page == 'profile' else '' }}">Profile</a>
+		<span class="fh-org-switcher" id="fh-org-switcher" style="display: none;">
+			<select id="fh-org-switcher-select"></select>
+		</span>
+		<a href="/logout">Logout</a>
+	</nav>
+</header>
+
+<div id="fh-toast-stack" class="fh-toast-stack"></div>
+
+<div id="fh-modal-backdrop" class="fh-modal-backdrop">
+	<div class="fh-modal">
+		<h3 id="fh-modal-title"></h3>
+		<p id="fh-modal-body"></p>
+		<div class="fh-modal-footer">
+			<button type="button" class="fh-btn fh-btn-secondary" id="fh-modal-cancel">Cancel</button>
+			<button type="button" class="fh-btn fh-btn-danger" id="fh-modal-confirm">Confirm</button>
+		</div>
+	</div>
+</div>
+
+<script src="/assets/feedback_hub/js/fh_api.js?v=12"></script>
+<script src="/assets/feedback_hub/js/fh_ui.js?v=12"></script>
+<script src="/assets/feedback_hub/js/org_switcher.js?v=12"></script>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "feedback" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	{% if not_found %}
+	<main class="fh-page-center">
+		<div class="fh-panel" style="text-align: center;">
+			<h1>Feedback Not Found</h1>
+			<p class="fh-hint">It doesn't exist, or you don't have access to it.</p>
+			<div class="fh-footer-actions" style="justify-content: center;">
+				<a class="fh-btn fh-btn-primary" href="/feedback_list">Back to Feedback</a>
+			</div>
+		</div>
+	</main>
+	{% else %}
+	<script>
+		window.fhFeedbackId = {{ feedback.name | tojson }};
+		window.fhCanUpdateFeedback = {{ "true" if can_update else "false" }};
+		window.fhCanDeleteFeedback = {{ "true" if can_delete else "false" }};
+	</script>
+
+	<main class="fh-shell">
+		<div class="fh-shell-header">
+			<h1>{{ feedback.title }}</h1>
+			<div class="fh-kanban-header-meta">
+				{% if can_update %}
+				<a class="fh-btn fh-btn-secondary" href="/feedback_edit?id={{ feedback.name }}">Edit</a>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="fh-detail-grid">
+			<div>
+				<div class="fh-card" style="margin-bottom: 1.5rem;">
+					<div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+						<span class="fh-badge">{{ feedback.category }}</span>
+						<span class="fh-badge {{ 'fh-badge-low' if feedback.priority == 'Low' else ('fh-badge-medium' if feedback.priority == 'Medium' else ('fh-badge-high' if feedback.priority == 'High' else 'fh-badge-urgent')) }}">{{ feedback.priority }}</span>
+						<span class="fh-badge {{ FH_STATUS_BADGE_CLASSES.get(feedback.status, '') }}">{{ feedback.status }}</span>
+					</div>
+
+					<p id="fh-feedback-description">{{ feedback.description }}</p>
+
+					<p class="fh-hint">
+						Submitted by {{ feedback.reporter or "Anonymous" }}
+						on {{ feedback.creation }}
+						{% if feedback.board %} &middot; Board: {{ feedback.board }}{% endif %}
+					</p>
+
+					<button type="button" class="fh-vote-widget" id="fh-vote-btn" data-voted="{{ '1' if feedback.has_voted else '0' }}">
+						<span aria-hidden="true">&#9650;</span>
+						<span id="fh-vote-count">{{ feedback.vote_count }}</span>
+						<span>votes</span>
+					</button>
+				</div>
+
+				<div class="fh-card" style="margin-bottom: 1.5rem;">
+					<h3>Attachments</h3>
+					<ul class="fh-attachment-list" id="fh-attachment-list"></ul>
+					{% if can_update %}
+					<div class="fh-field" style="margin-top: 0.75rem;">
+						<input type="file" id="fh-attachment-input">
+					</div>
+					{% endif %}
+				</div>
+
+				<div class="fh-card">
+					<h3>Comments</h3>
+					<div class="fh-comment-thread" id="fh-comment-thread"></div>
+					<form id="fh-comment-form" class="fh-comment-input-row">
+						<textarea id="fh-comment-text" placeholder="Add a comment..." rows="1"></textarea>
+						<button type="submit" class="fh-btn fh-btn-primary">Post</button>
+					</form>
+				</div>
+			</div>
+
+			<div>
+				<div class="fh-card">
+					<h3>Metadata</h3>
+					<p class="fh-hint">Created: {{ feedback.creation }}</p>
+					<p class="fh-hint">Last Modified: {{ feedback.modified }}</p>
+					<p class="fh-hint">Organization: {{ feedback.organization or "-" }}</p>
+					<p class="fh-hint">Product: {{ feedback.product or "-" }}</p>
+				</div>
+
+				<div class="fh-card" id="fh-activity-history-card" style="display: none; margin-top: 1.5rem;">
+					<h3>Activity History</h3>
+					<ul class="fh-attachment-list" id="fh-activity-history-list"></ul>
+				</div>
+
+				{% if can_delete %}
+				<div class="fh-danger-zone">
+					<h3>Danger Zone</h3>
+					<p class="fh-hint">Deleting feedback cannot be undone.</p>
+					<button type="button" class="fh-btn fh-btn-danger" id="fh-delete-btn">Delete Feedback</button>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</main>
+	{% endif %}
+
+	<script src="/assets/feedback_hub/js/feedback_detail.js?v=12"></script>
+</body>
+</html>

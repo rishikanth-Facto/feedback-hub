@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }} - Feedback Hub</title>
+	<link rel="stylesheet" href="/assets/feedback_hub/css/design_system.css?v=12">
+</head>
+<body class="fh-body">
+	<script>window.csrf_token = "{{ csrf_token }}";</script>
+	{% set active_page = "products" %}
+	{% include "feedback_hub/templates/includes/navbar.html" %}
+
+	{% if not_found %}
+	<main class="fh-page-center">
+		<div class="fh-panel" style="text-align: center;">
+			<h1>Product Not Found</h1>
+			<p class="fh-hint">It doesn't exist, or you don't have access to it.</p>
+			<div class="fh-footer-actions" style="justify-content: center;">
+				<a class="fh-btn fh-btn-primary" href="/products">Back to Products</a>
+			</div>
+		</div>
+	</main>
+	{% else %}
+	<script>
+		window.fhProductId = {{ product.name | tojson }};
+	</script>
+
+	<main class="fh-shell">
+		<div class="fh-shell-header">
+			<h1>{{ product.product_name }}</h1>
+			<span class="fh-badge {{ 'fh-badge-active' if product.status == 'Active' else 'fh-badge-archived' }}">{{ product.status }}</span>
+		</div>
+
+		<div class="fh-detail-grid">
+			<div>
+				<div class="fh-card" style="margin-bottom: 1.5rem;">
+					<h3>Details</h3>
+					<div id="fh-alert" class="fh-alert fh-alert-error"></div>
+
+					<form id="fh-product-edit-form">
+						<div class="fh-field">
+							<label for="product_name">Product Name</label>
+							<input type="text" id="product_name" name="product_name" value="{{ product.product_name }}">
+						</div>
+						<div class="fh-field">
+							<label for="description">Description</label>
+							<textarea id="description" name="description" rows="3">{{ product.description or "" }}</textarea>
+						</div>
+						<div class="fh-field">
+							<label for="status">Status</label>
+							<select id="status" name="status">
+								<option value="Active" {{ "selected" if product.status == "Active" else "" }}>Active</option>
+								<option value="Archived" {{ "selected" if product.status == "Archived" else "" }}>Archived</option>
+							</select>
+							<p class="fh-hint">Archiving a product blocks new boards from being created under it; existing boards remain editable.</p>
+						</div>
+						<p class="fh-hint">Slug: <span class="fh-mono">{{ product.slug }}</span></p>
+						<div class="fh-footer-actions">
+							<button type="submit" class="fh-btn fh-btn-primary">Save Changes</button>
+						</div>
+					</form>
+				</div>
+
+				<div class="fh-card">
+					<div class="fh-shell-header" style="margin-bottom: 1rem;">
+						<h3 style="margin: 0;">Boards</h3>
+						<a class="fh-btn fh-btn-primary" href="/board_new?product={{ product.name }}">+ New Board</a>
+					</div>
+					<div id="fh-boards-loading" class="fh-hint">Loading...</div>
+					<div class="fh-table-wrap">
+						<table class="fh-table" id="fh-boards-table" style="display: none;">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Slug</th>
+									<th>Visibility</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody id="fh-boards-table-body"></tbody>
+						</table>
+					</div>
+					<div id="fh-boards-empty" class="fh-empty-state" style="display: none;">
+						<h2>No boards yet</h2>
+						<p>Create the first board for this product.</p>
+						<a class="fh-btn fh-btn-primary" href="/board_new?product={{ product.name }}">Create Board</a>
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<div class="fh-card">
+					<h3>Metadata</h3>
+					<p class="fh-hint">Owner: {{ product.product_owner }}</p>
+					<p class="fh-hint">Created: {{ product.creation }}</p>
+					<p class="fh-hint">Last Modified: {{ product.modified }}</p>
+				</div>
+
+				<div class="fh-danger-zone">
+					<h3>Danger Zone</h3>
+					<p class="fh-hint">Deleting a product cannot be undone.</p>
+					<button type="button" class="fh-btn fh-btn-danger" id="fh-delete-btn">Delete Product</button>
+				</div>
+			</div>
+		</div>
+	</main>
+	{% endif %}
+
+	<script src="/assets/feedback_hub/js/product_detail.js?v=12"></script>
+</body>
+</html>
